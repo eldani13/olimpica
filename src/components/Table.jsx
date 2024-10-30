@@ -7,7 +7,7 @@ const Table = ({ onProductsChange }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/products");
+      const response = await fetch("https://backend-olimpica.onrender.com/api/products");
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
@@ -31,7 +31,7 @@ const Table = ({ onProductsChange }) => {
   const updateProductDays = async (sap, days) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/products/${sap}`,
+        `https://backend-olimpica.onrender.com/api/products/${sap}`,
         {
           method: "PUT",
           headers: {

@@ -77,7 +77,7 @@ const Home = () => {
     try {
       await Promise.all(
         resetProducts.map((product) =>
-          fetch(`http://localhost:5000/api/products/${product.sap}`, {
+          fetch(`https://backend-olimpica.onrender.com/api/products/${product.sap}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
