@@ -7,7 +7,9 @@ const Table = ({ onProductsChange }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("https://backend-olimpica.onrender.com/api/products");
+      const response = await fetch(
+        "https://backend-olimpica.onrender.com/api/products"
+      );
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
@@ -42,7 +44,9 @@ const Table = ({ onProductsChange }) => {
       );
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Error al actualizar el producto: ${errorData.message}`);
+        throw new Error(
+          `Error al actualizar el producto: ${errorData.message}`
+        );
       }
     } catch (error) {
       console.error(error);
@@ -132,13 +136,13 @@ const Table = ({ onProductsChange }) => {
         </table>
 
         <div className="md:hidden">
-          <div className="border-b mb-4 p-4 bg-gradient-to-br from-gray-50 to-gray-200 rounded-lg shadow-lg w-fit">
-            <div className="overflow-x-auto">
-              <div className="flex items-center justify-between text-gray-700 font-semibold text-sm min-w-max rounded-lg overflow-hidden shadow-md">
+          <div className="border-b mb-4 p-4 bg-gradient-to-br from-gray-50 to-gray-200 rounded-lg shadow-lg w-[100%] overflow-hidden">
+            <div className="overflow-x-auto border-collapse">
+              <div className="flex items-center justify-between text-gray-700 font-semibold text-sm min-w-max rounded-lg shadow-md">
                 <span className="w-24 text-center bg-gray-300 py-2 font-bold">
                   SAP
                 </span>
-                <span className="w-24 text-center bg-gray-300 py-2 font-bold">
+                <span className="w-24 text-center bg-gray-300 py-2 font-bold sticky left-0 z-10">
                   NOMBRE
                 </span>
                 <span className="w-24 text-center bg-gray-300 py-2 font-bold">
@@ -169,7 +173,7 @@ const Table = ({ onProductsChange }) => {
                   <span className="w-24 text-center font-semibold">
                     {product.sap}
                   </span>
-                  <span className="w-24 text-center font-semibold">
+                  <span className="w-24 text-center font-semibold sticky left-0 z-10 bg-[#f2f3f5]">
                     {product.name}
                   </span>
                   {Object.keys(product.days).map((day) => (
