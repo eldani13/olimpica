@@ -3,8 +3,9 @@ import { AuthContext } from "../context/AuthContext";
 import Table from "../components/Table";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import { FaFileExcel } from "react-icons/fa";
+import { FaFileExcel, FaUser } from "react-icons/fa";
 import Modal from "react-modal";
+import axios from 'axios';
 
 Modal.setAppElement("#root");
 
@@ -14,6 +15,7 @@ const Home = () => {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -25,6 +27,25 @@ const Home = () => {
   //   navigate("/");
   //   return null;
   // }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios
+        .get('https://backend-olimpica.onrender.com/api/users/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          setUsername(response.data.username); 
+        })
+        .catch((error) => {
+          console.error('Error al obtener los datos del usuario', error);
+        });
+    }
+  }, []);
+  // console.log(username);
+  
 
   useEffect(() => {}, []);
 
@@ -77,13 +98,16 @@ const Home = () => {
     try {
       await Promise.all(
         resetProducts.map((product) =>
-          fetch(`https://backend-olimpica.onrender.com/api/products/${product.sap}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ days: product.days }),
-          })
+          fetch(
+            `https://backend-olimpica.onrender.com/api/products/${product.sap}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ days: product.days }),
+            }
+          )
         )
       );
       setSuccessModalOpen(true);
@@ -97,16 +121,22 @@ const Home = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <div className="flex justify-between items-center p-6 mb-6 bg-gradient-to-r from-[#005caa] to-[#e30613] shadow-md">
-        <h1 className="text-3xl font-extrabold text-white tracking-wide drop-shadow-lg">
+      <div className="flex flex-col sm:flex-row justify-between items-center p-6 mb-6 bg-gradient-to-r from-[#005caa] to-[#e30613] shadow-md">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide drop-shadow-lg text-center sm:text-left">
           Gestión de productos
         </h1>
-        <button
-          onClick={logout}
-          className="bg-white text-blue-700 font-semibold px-6 py-2 rounded-full shadow-md hover:bg-red-100 transition duration-200 ease-in-out transform hover:scale-105"
-        >
-          Logout
-        </button>
+        <div className="text-white font-medium flex gap-2 sm:gap-4 mt-4 sm:mt-0">
+          <span className="bg-white flex justify-center items-center gap-1 text-blue-700 text-sm sm:text-base font-semibold px-4 py-2 rounded-full shadow-md hover:bg-red-100 transition duration-200 ease-in-out transform hover:scale-105">
+            <FaUser />
+            {username ? username : "Busc..."}
+          </span>
+          <button
+            onClick={logout}
+            className="bg-white text-sm sm:text-base text-blue-700 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-red-100 transition duration-200 ease-in-out transform hover:scale-105"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl">
