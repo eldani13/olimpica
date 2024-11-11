@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       axios
-        .get('http://localhost:5000/api/users/profile', {
+        .get('https://backend-olimpica.onrender.com/api/users/profile', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

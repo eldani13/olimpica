@@ -7,19 +7,29 @@ const Table = ({ onProductsChange }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(
-        "https://backend-olimpica.onrender.com/api/products"
-      );
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error("No token provided");
+      }
+  
+      const response = await fetch("https://backend-olimpica.onrender.com/api/products", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,  
+        },
+      });
+  
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
+  
       const data = await response.json();
       setProducts(data);
     } catch (error) {
       console.error(error);
     }
   };
-
+  
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -31,6 +41,13 @@ const Table = ({ onProductsChange }) => {
   }, [products, onProductsChange]);
 
   const updateProductDays = async (sap, days) => {
+
+    const token = localStorage.getItem('token'); 
+
+    if (!token) {
+      console.error("Token no encontrado");
+      return;
+    }
     try {
       const response = await fetch(
         `https://backend-olimpica.onrender.com/api/products/${sap}`,
@@ -38,6 +55,7 @@ const Table = ({ onProductsChange }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ days }),
         }
